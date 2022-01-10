@@ -1,4 +1,4 @@
-import { clusterApiUrl } from '@solana/web3.js';
+import {clusterApiUrl, PublicKey} from '@solana/web3.js';
 import {
   ChainId,
   CHAIN_ID_AVAX,
@@ -29,6 +29,7 @@ import { isEVMChain } from '../lib/array';
 const SOLANA_THRESHOLD_LAMPORTS = BigInt(300000);
 const ETHEREUM_THRESHOLD_WEI = BigInt(35000000000000000);
 const TERRA_THRESHOLD_ULUNA = BigInt(500000);
+export const GUMDROP_DISTRIBUTOR_ID = new PublicKey('gdrpGjVffourzkdDRrQmySw4aTHr8a3xmQzzxSwFD1a');
 
 export const isSufficientBalance = (
   chainId: ChainId,

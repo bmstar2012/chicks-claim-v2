@@ -24,9 +24,6 @@ import { useStyles } from './useStyles';
 import ShowTx from '../components/ShowTx';
 import ConsoleHelper from '../helpers/ConsoleHelper';
 import {useSolanaWallet} from "../contexts/SolanaWalletContext";
-import SolanaCreateAssociatedAddress, {
-  useAssociatedAccountExistsState,
-} from '../components/SolanaCreateAssociatedAddress';
 import KeyAndBalance from "../components/KeyAndBalance";
 import {toTokenBalanceString} from "../utils/solchickHelper";
 
@@ -39,30 +36,29 @@ function useQuery() {
 
 export const ClaimView = () => {
   const classes = useStyles();
-  const [transactionId, setTransactionId] = useState('');
   const [successMessage, setSuccessMessage] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const { publicKey: solanaAddress } = useSolanaWallet();
-  const { associatedAccountExists, setAssociatedAccountExists } =
-    useAssociatedAccountExistsState(CHAIN_ID_SOLANA);
 
   // eslint-disable-next-line react/destructuring-assignment
   const query = useQuery();
   const searchParams = useMemo(() => {
-    const distributor = query.get('distributor');
-    const amount = query.get('amount');
-    const handle = query.get('handle');
-    const proof = query.get('proof');
-    const index = query.get('index');
+    const distributor = query.get('distributor') || '';
+    const amount = query.get('amount') || '';
+    const handle = query.get('handle') || '';
+    const proof = query.get('proof') || '';
+    const index = query.get('index') || '';
+    const tokenAcc = query.get('tokenAcc') || '';
     return {
       distributor,
       amount,
       handle,
       proof,
       index,
+      tokenAcc
     }
   }, [query]);
-  const [distributor, setDistributor] = React.useState(query.get('distributor') || "");
+
   ConsoleHelper("searchParams", searchParams);
   const {
     claim, isProcessing, statusCode, errorCode, lastError,
@@ -70,13 +66,11 @@ export const ClaimView = () => {
   } = useClaim();
 
   const onClaim = async () => {
-    claim();
+    claim(searchParams);
   };
   const amountTxt = toTokenBalanceString(BigInt(searchParams.amount || ''), CHAIN_ID_SOLANA);
 
   ConsoleHelper("solanaAddress", solanaAddress);
-
-  const inputTargetAmount = '1.2';
 
   const statusMessage = useMemo(() => {
     if (isProcessing || statusCode !== ClaimStatusCode.FAILED) {
@@ -135,18 +129,6 @@ export const ClaimView = () => {
               <br/>
               <br/>
               <KeyAndBalance chainId={CHAIN_ID_SOLANA} />
-              <div>
-              {!associatedAccountExists && (
-                <div style={{ paddingTop: '20px', width: '32rem' }}>
-                  <SolanaCreateAssociatedAddress
-                    associatedAccountExists={associatedAccountExists}
-                    setAssociatedAccountExists={
-                      setAssociatedAccountExists
-                    }
-                  />
-                </div>
-              )}
-              </div>
               <br/>
               <div>
                 <div className={classes.chainSelectWrapper}>
