@@ -1,0 +1,37 @@
+@font-face {
+  font-family: 'Bergern';
+  src: url('./fonts/Bergern.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Bergern-Bold';
+  src: url('./fonts/Bergern-Bold.woff') format('woff');
+}
+
+.step-btn-wallet-container {
+  margin-top: 16px;
+  display: flex;
+}
+
+.step-btn-wallet-container button {
+  width: 15rem !important;
+  height: 40px !important;
+}
+
+.step-btn-title {
+  font-size: 1.25rem;
+  font-family: 'Bergern', sans-serif;
+  font-weight: 400;
+  line-height: 1.66;
+  color: #fff;
+}
+
+.step-btn-divider {
+  width: 8px;
+  height: auto;
+  display: inline-block;
+}
+
+.MuiStepIcon-text {
+  font-family: sans-serif !important;
+}
